@@ -1,11 +1,11 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 // ---------- Constants ----------
 
 export const MATCH_STATUS = {
-  SCHEDULED: 'scheduled',
-  LIVE: 'live',
-  FINISHED: 'finished',
+  SCHEDULED: "scheduled",
+  LIVE: "live",
+  FINISHED: "finished",
 };
 
 // ---------- Schemas ----------
@@ -20,21 +20,11 @@ export const matchIdParamSchema = z.object({
 
 export const createMatchSchema = z
   .object({
-    sport: z.string().min(1, 'sport is required'),
-    homeTeam: z.string().min(1, 'homeTeam is required'),
-    awayTeam: z.string().min(1, 'awayTeam is required'),
-    startTime: z
-      .string()
-      .refine((val) => !isNaN(Date.parse(val)), {
-        message: 'startTime must be a valid ISO date string',
-      })
-      .optional(),
-    endTime: z
-      .string()
-      .refine((val) => !isNaN(Date.parse(val)), {
-        message: 'endTime must be a valid ISO date string',
-      })
-      .optional(),
+    sport: z.string().min(1, "sport is required"),
+    homeTeam: z.string().min(1, "homeTeam is required"),
+    awayTeam: z.string().min(1, "awayTeam is required"),
+    startTime: z.iso.datetime().optional(),
+    endTime: z.iso.datetime().optional(),
     homeScore: z.coerce.number().int().nonnegative().optional(),
     awayScore: z.coerce.number().int().nonnegative().optional(),
   })
@@ -43,8 +33,8 @@ export const createMatchSchema = z
       if (new Date(data.endTime) <= new Date(data.startTime)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          path: ['endTime'],
-          message: 'endTime must be chronologically after startTime',
+          path: ["endTime"],
+          message: "endTime must be chronologically after startTime",
         });
       }
     }
