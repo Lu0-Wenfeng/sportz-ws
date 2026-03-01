@@ -35,7 +35,7 @@ export function attachWebSocketServer(server) {
 
   wss.on("close", () => clearInterval(interval));
 
-  wss.on("connection", async (socket) => {
+  wss.on("connection", async (socket, req) => {
     if (wsArcjet) {
       try {
         const decision = await wsArcjet.protect(req);
