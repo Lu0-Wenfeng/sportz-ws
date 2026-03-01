@@ -1,5 +1,6 @@
 import express from "express";
 import http from "http";
+import { securityMiddleware } from "./arcjet.js";
 import { matchRouter } from "./routes/matches.js";
 import { attachWebSocketServer } from "./ws/server.js";
 
@@ -10,10 +11,12 @@ const app = express();
 const server = http.createServer(app);
 
 app.use(express.json());
+app.use(securityMiddleware());
 
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to Sportz!" });
 });
+
 
 app.use("/matches", matchRouter);
 
